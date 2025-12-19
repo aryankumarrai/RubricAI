@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plagiarism Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+    <link href="/static/assets/fevicon.svg" rel="shortcut icon">
+</head>
+<body>
+    <div class="container">
+        <h1>Plagiarism Report for: {{ assignment_title }}</h1>
+        <p>Showing pairs with similarity scores above 75%.</p>
+        <a href="/dashboard"><button class="button">Back to Dashboard</button></a>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student A</th>
+                    <th>Student B</th>
+                    <th>Similarity Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.name1 }}</td>
+                        <td>{{ result.name2 }}</td>
+                        <td>{{ "%.1f"|format(result.score * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">No potential similarity detected above the threshold for this assignment.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Assignment Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/assets/Logo.svg" rel="shortcut icon">
+</head>
+<body>
+    <ul class="background-shapes">
+        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <div class="container">
+        <h1>AI Assignment Analyzer</h1>
+        <a href="/logout"><button>Logout</button></a>
+        <hr>
+        <div class="course-header">
+            <h2>1. Select a Course</h2>
+            <div id="marksheet-link-container"></div>
+        </div>
+        <select id="course-select">
+            <option value="">-- Please select a course --</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="assignments-container" class="container"></div>
+
+    <!-- New Preloader Structure -->
+    <div id="full-screen-preloader">
+        <div class="loader">
+            <span>Analyzing...</span>
+        </div>
+    </div>
+    
+    <!-- Custom Confirmation Modal -->
+    <div id="custom-confirm-modal" class="custom-modal-overlay">
+        <div class="custom-modal">
+            <h3>Are you sure?</h3>
+            <p id="custom-confirm-msg">This action cannot be undone.</p>
+            <div class="custom-modal-actions">
+                <button id="custom-confirm-cancel">Cancel</button>
+                <button id="custom-confirm-ok" class="confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
+

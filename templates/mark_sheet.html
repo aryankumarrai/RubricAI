@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mark Sheet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/marksheet.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/assets/Logo.svg" rel="shortcut icon">
+</head>
+<body>
+    <div class="container">
+        <h1>Overall Mark Sheet for: {{ course_title }}</h1>
+        <a href="/dashboard"><button class="button">Back to Dashboard</button></a>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Average Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.name }}</td>
+                        <td>{{ "%.1f"|format(result.average_score * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2">No results found for this course yet.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

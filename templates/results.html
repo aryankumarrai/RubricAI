@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+    <link href="/static/assets/Logo.svg" rel="shortcut icon">
+</head>
+<body>
+    <ul class="background-shapes">
+        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <div class="container">
+        <h1>Analysis Results for: {{ assignment_title }}</h1>
+        <a href="/dashboard"><button class="button">Back to Dashboard</button></a>
+        <a href="{{ url_for('plagiarism_report', course_id=request.view_args['course_id'], assignment_id=request.view_args['assignment_id']) }}">
+            <button class="button similarity-btn">View Similarity Report</button>
+        </a>
+        <button id="email-btn" class="button email-btn" onclick="sendEmails()">Mail Reports</button>
+        <hr>
+        <div id="status-message" style="display:none; padding: 10px; margin-bottom: 15px; border-radius: 5px;"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Accuracy Score</th>
+                    <th>Condensed Justification</th>
+                    <th>Report</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.name }}</td>
+                        <td>{{ "%.1f"|format(result.score) }}%</td>
+                        <td>{{ result.justification.split('|')[0] | striptags | truncate(100) }}</td>
+                        <td>
+                            <button onclick="openModal('{{ loop.index0 }}')">View Report</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No results found for this assignment.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Themed Modals -->
+    {% if results %}
+        {% for result in results %}
+        <div id="modal-{{ loop.index0 }}" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Report for {{ result.name }}</h2>
+                <p><strong>Score:</strong> {{ "%.1f"|format(result.score) }}%</p>
+                <p><strong>Detailed Justification:</strong></p>
+                {% for point in result.justification.split('|') %}
+                    {% if point.strip() %}
+                    <div class="justification-point">
+                        {{ point.strip() }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                <button onclick="closeModal('{{ loop.index0 }}')">Close</button>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <script>
+        function openModal(index) {
+            document.getElementById('modal-' + index).classList.add('visible');
+        }
+        function closeModal(index) {
+            document.getElementById('modal-' + index).classList.remove('visible');
+        }
+
+        async function sendEmails() {
+            const btn = document.getElementById('email-btn');
+            const statusMessage = document.getElementById('status-message');
+            const originalText = btn.textContent;
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            const pathParts = window.location.pathname.split('/');
+            const courseId = pathParts[2];
+            const assignmentId = pathParts[3];
+            const url = `/email_reports/${courseId}/${assignmentId}`;
+
+            try {
+                const response = await fetch(url, { method: 'POST' });
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusMessage.textContent = data.status || 'Emails sent successfully!';
+                    statusMessage.style.backgroundColor = '#28a745';
+                } else {
+                    throw new Error(data.error || 'An unknown error occurred.');
+                }
+            } catch (error) {
+                statusMessage.textContent = `Error: ${error.message}`;
+                statusMessage.style.backgroundColor = '#dc3545';
+            } finally {
+                statusMessage.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = originalText;
+                setTimeout(() => { statusMessage.style.display = 'none'; }, 6000);
+            }
+        }
+    </script>
+</body>
+</html>
+
