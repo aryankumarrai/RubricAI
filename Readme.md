@@ -12,6 +12,9 @@ RubricAI is a sophisticated web application designed to automate the grading and
 * **🔗 Full Google Integration**: Authenticates securely with Google OAuth and seamlessly integrates with Google Classroom and Google Drive APIs.
 * **⚡ Asynchronous Processing**: Employs a Celery task queue with Redis to handle long-running analyses in the background, ensuring the UI remains fast and responsive.
 * **📊 Comprehensive Reporting**: Generates easy-to-read reports for individual grades, class mark sheets, and plagiarism scores.
+* **📬 Email Delivery**:
+  * automatically sends grade reports to students.
+  * includes personalized remarks and performance feedback in the email.
 
 ## 🛠️ Technology Stack
 
@@ -94,17 +97,39 @@ Open your browser and navigate to [http://127.0.0.1:5000]
 
 ## 📂 Project Structure
 ``` sh
-.
-├── .env
-├── app.py                  # Main Flask application, routes, and UI logic
-├── client_secret.json      # Google OAuth credentials
-├── plagiarism_checker.py   # Logic for similarity analysis
-├── programming_analyzer.py # Logic for grading programming code
-├── Read me.txt             # Original README file
-├── README.md               # GitHub formatted README
-├── requirements.txt        # Project dependencies
-├── tasks.py                # Celery background task definitions
-├── theory_analyzer.py      # Logic for grading theory answers
-└── utils.py                # Utility for text extraction (OCR)
+
+rubricai/
+├── __pycache__/              # cached Python bytecode 
+├── instance/
+│   └── results.db           # SQLite database
+├── static/
+│   ├── assets/
+│   ├── css/
+│   │   ├── dashboard.css
+│   │   ├── marksheet.css
+│   │   └── result.css
+│   └── js/
+│       └── dashboard.js
+├── templates/
+│   ├── dashboard.html
+│   ├── index.html
+│   ├── mark_sheet.html
+│   ├── plagiarism_report.html
+│   └── results.html
+├── venv/                    # virtual environment
+├── .gitignore
+├── .env                     # environment variables
+├── app.py
+├── tasks.py
+├── plagiarism_checker.py
+├── programming_analyzer.py
+├── theory_analyzer.py
+├── utils.py
+├── smtp_test.py
+├── client_secret.json       # ignored, OAuth credentials
+├── client_secret2.json
+└── requirements.txt
+
 
 ```
+
