@@ -1,4 +1,4 @@
-# RubricAI: AI-Powered Grading Assistant
+# RubricAI: AI-driven Automated Assignment Evaluator
 
 RubricAI is a sophisticated web application designed to automate the grading and plagiarism analysis of Google Classroom assignments. It leverages Google's Generative AI, the Vision API, and a robust background task queue to provide a seamless and efficient experience for instructors.
 
@@ -106,4 +106,5 @@ Open your browser and navigate to [http://127.0.0.1:5000]
 ├── tasks.py                # Celery background task definitions
 ├── theory_analyzer.py      # Logic for grading theory answers
 └── utils.py                # Utility for text extraction (OCR)
+
 ```
