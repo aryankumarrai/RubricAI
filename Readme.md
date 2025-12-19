@@ -126,10 +126,10 @@ rubricai/
 ├── theory_analyzer.py
 ├── utils.py
 ├── smtp_test.py
-├── client_secret.json       # ignored, OAuth credentials
-├── client_secret2.json
+├── client_secret.json       # OAuth credentials
 └── requirements.txt
 
 
 ```
+
 
